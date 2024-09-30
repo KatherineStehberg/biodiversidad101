@@ -15,11 +15,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/login', formData);
+      // Usamos la URL del backend desde la variable de entorno de Vite
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/login`, formData);
       console.log('Inicio de sesión exitoso:', response.data);
+      // Guardar el token en el almacenamiento local o en cookies si es necesario
+      localStorage.setItem('token', response.data.token);
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
-      setError('Correo o contraseña incorrectos.');
+      setError('Ocurrió un error al intentar iniciar sesión.');
     }
   };
 
