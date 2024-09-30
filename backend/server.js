@@ -8,7 +8,9 @@ const pool = require('./db');
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://mi-frontend-en-render.com' // Cambia esto por la URL de tu frontend en Render
+}));
 app.use(express.json());
 
 // Ruta principal
@@ -53,6 +55,17 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+// Ruta para devolver la lista de productos
+app.get('/api/products', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM products');
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Error al obtener los productos.');
+  }
+});
+
 // Middleware de verificación de token
 const verifyToken = (req, res, next) => {
   const token = req.header('Authorization');
@@ -67,20 +80,8 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-// Ruta para devolver la lista de productos
-app.get('/api/products', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM products');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Error al obtener los productos.');
-  }
-});
-
+// Iniciar servidor
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Backend running on port ${PORT}`);
 });
-
-
