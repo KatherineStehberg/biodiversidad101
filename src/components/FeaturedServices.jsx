@@ -1,5 +1,5 @@
 import React from 'react';
-import '../assets/styles/featuredservices.css';
+import '../assets/styles/featuredServices.css';
 
 const featuredServicesData = [
   {
